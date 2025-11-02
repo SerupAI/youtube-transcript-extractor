@@ -24,7 +24,6 @@ from pathlib import Path
 from typing import Optional, Dict, Any
 
 from apify import Actor
-from apify.log import ActorLogLevel
 
 
 class YouTubeTranscriptExtractor:
@@ -189,7 +188,7 @@ async def main() -> None:
     """Main entry point for the YouTube Transcript Extractor Actor"""
     
     async with Actor:
-        Actor.log.set_level(ActorLogLevel.INFO)
+        # Actor.log.set_level('INFO')  # Default level is already INFO
         Actor.log.info('🎬 YouTube Transcript Extractor Actor started!')
         
         # Get input from the Actor
