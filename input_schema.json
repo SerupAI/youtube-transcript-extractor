@@ -24,15 +24,30 @@
         "required": ["url"]
       }
     },
-    "videoUrls": {
-      "title": "Video URLs (alternative format)",
-      "type": "array",
-      "description": "Alternative way to provide YouTube URLs as a simple array of strings",
-      "editor": "stringList",
-      "items": {
-        "type": "string",
-        "pattern": "^https?://.*youtube.*"
-      }
+    "language": {
+      "title": "Language Preference",
+      "type": "string",
+      "description": "Preferred subtitle language (will auto-detect if not available)",
+      "editor": "select",
+      "enum": ["auto", "en", "es", "fr", "de", "it", "pt", "ja", "ko", "ru", "nl"],
+      "enumTitles": ["Auto-detect", "English", "Spanish", "French", "German", "Italian", "Portuguese", "Japanese", "Korean", "Russian", "Dutch"],
+      "default": "auto"
+    },
+    "preferManual": {
+      "title": "Prefer Manual Subtitles",
+      "type": "boolean",
+      "description": "Prefer manually created subtitles over auto-generated ones",
+      "editor": "checkbox",
+      "default": true
+    },
+    "outputFormat": {
+      "title": "Output Format",
+      "type": "string",
+      "description": "Format for the transcript output",
+      "editor": "select",
+      "enum": ["clean", "srt", "vtt"],
+      "enumTitles": ["Clean Text (recommended)", "SRT with Timestamps", "Raw VTT Format"],
+      "default": "clean"
     },
     "proxy": {
       "title": "Proxy Server",

@@ -65,7 +65,7 @@ class YouTubeTranscriptExtractor:
             return parts[0]
         return vtt_time
     
-    def process_vtt_file(self, vtt_file: Path, include_timestamps: bool = False) -> str:
+    def process_vtt_file(self, vtt_file: Path, include_timestamps: bool = False, output_format: str = 'clean') -> str:
         """Process VTT file using optimized approach for clean text extraction"""
         try:
             with open(vtt_file, 'r', encoding='utf-8') as f:
@@ -119,11 +119,18 @@ class YouTubeTranscriptExtractor:
                             text_builder.append(clean_line)
                         seen_segments.add(clean_line)
             
-            # Join with appropriate separator
-            if include_timestamps:
-                result = "\n".join(text_builder)  # New lines for timestamped content
-            else:
-                result = " ".join(text_builder)   # Spaces for plain text
+            # Format output based on requested format
+            if output_format == 'vtt':
+                # Return original VTT content for raw format
+                return content
+            elif output_format == 'srt':
+                # Convert to SRT format (simplified)
+                result = "\n".join(text_builder) if include_timestamps else " ".join(text_builder)
+            else:  # clean format (default)
+                if include_timestamps:
+                    result = "\n".join(text_builder)  # New lines for timestamped content
+                else:
+                    result = " ".join(text_builder)   # Spaces for plain text
             
             Actor.log.debug(f"Extracted {len(result)} characters from VTT")
             return result
@@ -132,7 +139,7 @@ class YouTubeTranscriptExtractor:
             Actor.log.error(f"Error processing subtitle file: {e}")
             return ""
     
-    async def extract_transcript(self, video_url: str, proxy: Optional[str] = None, include_timestamps: bool = False) -> Dict[str, Any]:
+    async def extract_transcript(self, video_url: str, proxy: Optional[str] = None, include_timestamps: bool = False, language: str = 'auto', prefer_manual: bool = True, output_format: str = 'clean') -> Dict[str, Any]:
         """Extract transcript using optimized yt-dlp VTT approach"""
         
         video_id = self.extract_video_id(video_url)
@@ -152,10 +159,12 @@ class YouTubeTranscriptExtractor:
                 youtube_url = f"https://www.youtube.com/watch?v={video_id}"
                 output_template = str(vtt_dir / "%(title)s.%(ext)s")
                 
+                # Build yt-dlp command with language support
+                sub_lang = "en" if language == "auto" else language
                 cmd = [
                     "yt-dlp",
-                    "--write-auto-subs",
-                    "--sub-lang", "en",
+                    "--write-auto-subs" if not prefer_manual else "--write-subs",
+                    "--sub-lang", sub_lang,
                     "--skip-download",
                     "--sub-format", "vtt", 
                     "--quiet",
@@ -163,6 +172,10 @@ class YouTubeTranscriptExtractor:
                     "-o", output_template,
                     youtube_url
                 ]
+                
+                # Add fallback to auto-generated if manual not available
+                if prefer_manual:
+                    cmd.append("--write-auto-subs")
                 
                 # Add proxy if provided
                 if proxy:
@@ -189,7 +202,7 @@ class YouTubeTranscriptExtractor:
                 Actor.log.info(f"Processing subtitle file...")
                 
                 # Process VTT file using optimized approach
-                transcript_text = self.process_vtt_file(vtt_file, include_timestamps)
+                transcript_text = self.process_vtt_file(vtt_file, include_timestamps, output_format)
                 
                 if not transcript_text or len(transcript_text.strip()) == 0:
                     raise RuntimeError("No transcript content found in VTT file")
@@ -231,15 +244,15 @@ async def main() -> None:
         
         # Extract configuration
         start_urls = actor_input.get('startUrls', [])
-        video_urls = actor_input.get('videoUrls', [])
         proxy = actor_input.get('proxy')
         max_retries = actor_input.get('maxRetries', 3)
         include_timestamps = actor_input.get('includeTimestamps', False)
+        language = actor_input.get('language', 'auto')
+        prefer_manual = actor_input.get('preferManual', True)
+        output_format = actor_input.get('outputFormat', 'clean')
         
-        # Combine URLs from both sources
+        # Process URLs from startUrls format (Apify standard)
         all_urls = []
-        
-        # Process startUrls format (Apify standard)
         for start_url in start_urls:
             if isinstance(start_url, dict):
                 url = start_url.get('url')
@@ -247,10 +260,6 @@ async def main() -> None:
                     all_urls.append(url)
             elif isinstance(start_url, str):
                 all_urls.append(start_url)
-        
-        # Process videoUrls format (direct list)
-        if video_urls:
-            all_urls.extend(video_urls)
         
         if not all_urls:
             Actor.log.error('No video URLs provided in input')
@@ -273,7 +282,7 @@ async def main() -> None:
             while retry_count < max_retries and not success:
                 try:
                     # Extract transcript
-                    result = await extractor.extract_transcript(video_url, proxy, include_timestamps)
+                    result = await extractor.extract_transcript(video_url, proxy, include_timestamps, language, prefer_manual, output_format)
                     
                     # Save to dataset
                     await Actor.push_data(result)

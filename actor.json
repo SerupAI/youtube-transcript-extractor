@@ -2,7 +2,7 @@
   "actorSpecification": 1,
   "name": "youtube-transcript-extractor",
   "title": "YouTube Transcript Extractor",
-  "description": "Extract transcripts from YouTube videos using optimized yt-dlp VTT subtitle approach. Designed to bypass bot detection with residential proxy support.",
+  "description": "Simple YouTube transcript extraction. No complex options, just clean transcript text. Half the price of complex scrapers at $2.50/1,000 transcripts.",
   "version": "1.0.0",
   "meta": {
     "templateId": "python-empty"

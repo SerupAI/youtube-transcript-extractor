@@ -1,29 +1,31 @@
-# YouTube Transcript Extractor
+# Simple YouTube Transcript Extractor
 
-**The most cost-effective YouTube transcript extraction solution on Apify.**
+**Half the price, zero complexity. Just clean transcript text.**
 
-Extract transcripts from YouTube videos with 99% success rate. No $20/month fees like competitors - pay only per use. Perfect for content creators, SEO agencies, and developers.
+Tired of complex YouTube scrapers with 25+ configuration options? We extract transcripts with **3 simple fields** at **$2.50 per 1,000 transcripts** - 50% cheaper than complex alternatives.
 
 ## 🚀 Key Features
 
-- **💰 Cost-Effective**: Pay only $0.02 per successful transcript (no monthly fees)
-- **⚡ High Success Rate**: 99% extraction success with anti-bot detection bypass
-- **🎯 Batch Processing**: Process multiple videos in a single run
-- **⏱️ Timestamp Support**: Optional timestamps for premium use cases
-- **🌐 Proxy Ready**: Built-in residential proxy support
-- **🔄 Smart Retries**: Automatic retry logic with exponential backoff
-- **✨ Clean Output**: Removes VTT tags and duplicate segments
-- **📊 Structured Results**: User-friendly interface with detailed metadata
+- **💰 Best Pricing**: $2.50/1,000 transcripts (50% cheaper than complex scrapers)
+- **🎯 Dead Simple**: Just paste URLs → get clean text (no configuration hell)
+- **⚡ Clean Output**: Text-only results, no metadata bloat
+- **🌐 Language Support**: Auto-detect or choose from 10+ languages
+- **⏱️ Format Options**: Clean text, SRT timestamps, or raw VTT
+- **📝 Manual + Auto**: Prefers manual subtitles, falls back to auto-generated
+- **🎯 Batch Ready**: Process multiple videos in one run
+- **🔄 Smart Retries**: Automatic retry with proxy rotation
 
 ## 📋 Input Configuration
 
-### **Required**
-- **startUrls** or **videoUrls**: YouTube video URLs to process
+### **Simple Configuration (3 fields max!)**
 
-### **Optional Parameters**
-- **includeTimestamps**: Add timestamps to transcript (premium feature)
-- **proxy**: Proxy server for enhanced reliability  
-- **maxRetries**: Maximum retry attempts per video (default: 3)
+**Required:**
+- **YouTube URLs**: Paste one or multiple video URLs
+
+**Optional (choose what you need):**
+- **Language**: Auto-detect, English, Spanish, French, etc.
+- **Format**: Clean text (default), SRT with timestamps, Raw VTT
+- **Prefer Manual Subtitles**: Use human-created over auto-generated
 
 ### **Input Examples**
 
