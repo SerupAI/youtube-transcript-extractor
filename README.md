@@ -1,10 +1,10 @@
 # YouTube Transcript Extractor
 
-A powerful Apify Actor that extracts transcripts from YouTube videos using the proven Fabric-style yt-dlp VTT subtitle approach. Designed to bypass YouTube's bot detection while providing clean, accurate transcripts.
+A powerful Apify Actor that extracts transcripts from YouTube videos using an optimized yt-dlp VTT subtitle approach. Designed to bypass YouTube's bot detection while providing clean, accurate transcripts.
 
 ## 🚀 Features
 
-- **Fabric-Style Extraction**: Uses the same proven approach as the open-source Fabric tool
+- **Optimized Extraction**: Uses proven VTT subtitle extraction techniques
 - **VTT Subtitle Processing**: Extracts subtitles directly instead of downloading video files
 - **Smart Text Cleaning**: Removes VTT formatting tags and duplicate segments
 - **Bot Detection Bypass**: Optimized for success with YouTube's anti-bot measures
@@ -82,7 +82,7 @@ The Actor outputs structured data to the dataset with the following format:
 
 1. **URL Processing**: Extracts video IDs from various YouTube URL formats
 2. **VTT Extraction**: Uses yt-dlp to download only subtitle files (not video)
-3. **Text Processing**: Applies Fabric's proven VTT cleaning algorithm
+3. **Text Processing**: Applies advanced VTT cleaning and deduplication
 4. **Output Generation**: Creates structured data with metadata
 
 ## 🎯 Use Cases
@@ -127,5 +127,5 @@ For issues or questions:
 
 ## 🔄 Updates
 
-- **v1.0.0**: Initial release with Fabric-style extraction
+- **v1.0.0**: Initial release with optimized VTT extraction
 - Regular updates to maintain YouTube compatibility

@@ -2,7 +2,7 @@
   "actorSpecification": 1,
   "name": "youtube-transcript-extractor",
   "title": "YouTube Transcript Extractor",
-  "description": "Extract transcripts from YouTube videos using Fabric-style yt-dlp VTT subtitle approach. Optimized for bypassing bot detection with residential proxy support.",
+  "description": "Extract transcripts from YouTube videos using optimized yt-dlp VTT subtitle approach. Designed to bypass bot detection with residential proxy support.",
   "version": "1.0.0",
   "meta": {
     "templateId": "python-empty"

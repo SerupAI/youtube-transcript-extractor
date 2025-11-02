@@ -1,11 +1,11 @@
 """YouTube Transcript Extractor Actor
 
-This Apify Actor extracts transcripts from YouTube videos using the proven Fabric-style 
+This Apify Actor extracts transcripts from YouTube videos using an optimized 
 yt-dlp VTT subtitle approach. It's designed to bypass YouTube's bot detection by using
-residential proxies and optimized transcript extraction methods.
+residential proxies and advanced transcript extraction methods.
 
 Features:
-- Fabric-style VTT subtitle extraction
+- Optimized VTT subtitle extraction
 - Smart text cleaning and duplicate removal
 - Residential proxy support
 - Error handling and retry logic
@@ -27,7 +27,7 @@ from apify import Actor
 
 
 class YouTubeTranscriptExtractor:
-    """YouTube transcript extractor using Fabric's proven approach"""
+    """YouTube transcript extractor using optimized VTT processing"""
     
     def __init__(self):
         self.timestamp_regex = re.compile(r'^\\d+$|^\\d{1,2}:\\d{2}(:\\d{2})?(\.\\d{3})?$')
@@ -50,15 +50,15 @@ class YouTubeTranscriptExtractor:
         return None
     
     def is_timestamp_line(self, line: str) -> bool:
-        """Check if line is a timestamp (Fabric's regex approach)"""
+        """Check if line is a timestamp"""
         return bool(self.timestamp_regex.match(line))
     
     def remove_vtt_tags(self, text: str) -> str:
-        """Remove VTT formatting tags (Fabric's approach)"""
+        """Remove VTT formatting tags"""
         return self.tag_regex.sub('', text)
     
     def process_vtt_file(self, vtt_file: Path) -> str:
-        """Process VTT file using Fabric's exact approach for clean text extraction"""
+        """Process VTT file using optimized approach for clean text extraction"""
         try:
             with open(vtt_file, 'r', encoding='utf-8') as f:
                 content = f.read()
@@ -71,7 +71,7 @@ class YouTubeTranscriptExtractor:
             for line in lines:
                 line = line.strip()
                 
-                # Skip WEBVTT header, timestamps, and empty lines (Fabric's filters)
+                # Skip WEBVTT header, timestamps, and empty lines
                 if (line == "" or 
                     line == "WEBVTT" or 
                     "-->" in line or
@@ -82,16 +82,16 @@ class YouTubeTranscriptExtractor:
                     self.is_timestamp_line(line)):
                     continue
                 
-                # Remove VTT formatting tags (Fabric's approach)
+                # Remove VTT formatting tags
                 clean_line = self.remove_vtt_tags(line)
                 
                 if clean_line != "":
-                    # Fabric's duplicate detection
+                    # Smart duplicate detection
                     if clean_line not in seen_segments:
                         text_builder.append(clean_line)
                         seen_segments.add(clean_line)
             
-            # Join with spaces (like Fabric)
+            # Join with spaces for clean output
             return " ".join(text_builder)
             
         except Exception as e:
@@ -99,7 +99,7 @@ class YouTubeTranscriptExtractor:
             return ""
     
     async def extract_transcript(self, video_url: str, proxy: Optional[str] = None) -> Dict[str, Any]:
-        """Extract transcript using Fabric's yt-dlp VTT approach"""
+        """Extract transcript using optimized yt-dlp VTT approach"""
         
         video_id = self.extract_video_id(video_url)
         if not video_id:
@@ -110,11 +110,11 @@ class YouTubeTranscriptExtractor:
         # Create temp directory for VTT files
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
-            vtt_dir = temp_path / f"fabric-youtube-{video_id}"
+            vtt_dir = temp_path / f"youtube-{video_id}"
             vtt_dir.mkdir(parents=True, exist_ok=True)
             
             try:
-                # Build yt-dlp command (Fabric's exact approach)
+                # Build optimized yt-dlp command
                 youtube_url = f"https://www.youtube.com/watch?v={video_id}"
                 output_template = str(vtt_dir / "%(title)s.%(ext)s")
                 
@@ -154,7 +154,7 @@ class YouTubeTranscriptExtractor:
                 vtt_file = vtt_files[0]
                 Actor.log.info(f"Found VTT file: {vtt_file.name}")
                 
-                # Process VTT file using Fabric's approach
+                # Process VTT file using optimized approach
                 transcript_text = self.process_vtt_file(vtt_file)
                 
                 if not transcript_text or len(transcript_text.strip()) == 0:
@@ -172,7 +172,7 @@ class YouTubeTranscriptExtractor:
                     "video_title": video_title,
                     "transcript": transcript_text.strip(),
                     "transcript_length": len(transcript_text.strip()),
-                    "source": "fabric_ytdlp_vtt",
+                    "source": "ytdlp_vtt_optimized",
                     "language": "en",
                     "proxy_used": proxy if proxy else "direct"
                 }
@@ -262,7 +262,7 @@ async def main() -> None:
                     "video_url": video_url,
                     "error": last_error,
                     "attempts": max_retries,
-                    "source": "fabric_ytdlp_vtt"
+                    "source": "ytdlp_vtt_optimized"
                 }
                 await Actor.push_data(failed_result)
                 Actor.log.error(f'❌ Failed to extract transcript after {max_retries} attempts: {video_url}')
