@@ -28,6 +28,7 @@
       "title": "Video URLs (alternative format)",
       "type": "array",
       "description": "Alternative way to provide YouTube URLs as a simple array of strings",
+      "editor": "stringList",
       "items": {
         "type": "string",
         "pattern": "^https?://.*youtube.*"
