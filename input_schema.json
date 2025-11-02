@@ -41,6 +41,13 @@
       "editor": "textfield",
       "example": "http://residential-proxy.com:8080"
     },
+    "includeTimestamps": {
+      "title": "Include Timestamps",
+      "type": "boolean",
+      "description": "Include timestamps in transcript output (premium feature)",
+      "editor": "checkbox",
+      "default": false
+    },
     "maxRetries": {
       "title": "Max Retries",
       "type": "integer",

@@ -48,6 +48,11 @@
       "type": "string",
       "description": "Proxy server used for extraction (if any)"
     },
+    "includes_timestamps": {
+      "title": "Includes Timestamps",
+      "type": "boolean",
+      "description": "Whether timestamps are included in the transcript"
+    },
     "error": {
       "title": "Error Message",
       "type": "string",

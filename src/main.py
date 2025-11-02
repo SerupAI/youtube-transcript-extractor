@@ -57,7 +57,15 @@ class YouTubeTranscriptExtractor:
         """Remove VTT formatting tags"""
         return self.tag_regex.sub('', text)
     
-    def process_vtt_file(self, vtt_file: Path) -> str:
+    def format_vtt_timestamp(self, vtt_time: str) -> str:
+        """Format VTT timestamp for display"""
+        # VTT timestamps are in format "00:00:01.234" - convert to "00:00:01"
+        parts = vtt_time.split(".")
+        if len(parts) > 0:
+            return parts[0]
+        return vtt_time
+    
+    def process_vtt_file(self, vtt_file: Path, include_timestamps: bool = False) -> str:
         """Process VTT file using optimized approach for clean text extraction"""
         try:
             with open(vtt_file, 'r', encoding='utf-8') as f:
@@ -72,19 +80,31 @@ class YouTubeTranscriptExtractor:
             lines = content.split('\n')
             text_builder = []
             seen_segments = set()
+            current_timestamp = None
             
             for line in lines:
                 line = line.strip()
                 
-                # Skip WEBVTT header, timestamps, and empty lines
+                # Skip WEBVTT header and empty lines
                 if (line == "" or 
-                    line == "WEBVTT" or 
-                    "-->" in line or
+                    line == "WEBVTT" or
                     line.startswith("NOTE") or 
                     line.startswith("STYLE") or
                     line.startswith("Kind:") or 
-                    line.startswith("Language:") or
-                    self.is_timestamp_line(line)):
+                    line.startswith("Language:")):
+                    continue
+                
+                # Check if this line is a timestamp
+                if "-->" in line:
+                    if include_timestamps:
+                        # Extract start time for timestamp
+                        parts = line.split(" --> ")
+                        if len(parts) >= 1:
+                            current_timestamp = self.format_vtt_timestamp(parts[0])
+                    continue
+                
+                # Skip numeric sequence identifiers
+                if self.is_timestamp_line(line) and not ":" in line:
                     continue
                 
                 # Remove VTT formatting tags
@@ -93,11 +113,18 @@ class YouTubeTranscriptExtractor:
                 if clean_line != "":
                     # Smart duplicate detection
                     if clean_line not in seen_segments:
-                        text_builder.append(clean_line)
+                        if include_timestamps and current_timestamp:
+                            text_builder.append(f"[{current_timestamp}] {clean_line}")
+                        else:
+                            text_builder.append(clean_line)
                         seen_segments.add(clean_line)
             
-            # Join with spaces for clean output
-            result = " ".join(text_builder)
+            # Join with appropriate separator
+            if include_timestamps:
+                result = "\n".join(text_builder)  # New lines for timestamped content
+            else:
+                result = " ".join(text_builder)   # Spaces for plain text
+            
             Actor.log.debug(f"Extracted {len(result)} characters from VTT")
             return result
             
@@ -105,7 +132,7 @@ class YouTubeTranscriptExtractor:
             Actor.log.error(f"Error processing subtitle file: {e}")
             return ""
     
-    async def extract_transcript(self, video_url: str, proxy: Optional[str] = None) -> Dict[str, Any]:
+    async def extract_transcript(self, video_url: str, proxy: Optional[str] = None, include_timestamps: bool = False) -> Dict[str, Any]:
         """Extract transcript using optimized yt-dlp VTT approach"""
         
         video_id = self.extract_video_id(video_url)
@@ -162,7 +189,7 @@ class YouTubeTranscriptExtractor:
                 Actor.log.info(f"Processing subtitle file...")
                 
                 # Process VTT file using optimized approach
-                transcript_text = self.process_vtt_file(vtt_file)
+                transcript_text = self.process_vtt_file(vtt_file, include_timestamps)
                 
                 if not transcript_text or len(transcript_text.strip()) == 0:
                     raise RuntimeError("No transcript content found in VTT file")
@@ -181,7 +208,8 @@ class YouTubeTranscriptExtractor:
                     "transcript_length": len(transcript_text.strip()),
                     "source": "ytdlp_vtt_optimized",
                     "language": "en",
-                    "proxy_used": proxy if proxy else "direct"
+                    "proxy_used": proxy if proxy else "direct",
+                    "includes_timestamps": include_timestamps
                 }
                 
             except subprocess.TimeoutExpired:
@@ -206,6 +234,7 @@ async def main() -> None:
         video_urls = actor_input.get('videoUrls', [])
         proxy = actor_input.get('proxy')
         max_retries = actor_input.get('maxRetries', 3)
+        include_timestamps = actor_input.get('includeTimestamps', False)
         
         # Combine URLs from both sources
         all_urls = []
@@ -244,7 +273,7 @@ async def main() -> None:
             while retry_count < max_retries and not success:
                 try:
                     # Extract transcript
-                    result = await extractor.extract_transcript(video_url, proxy)
+                    result = await extractor.extract_transcript(video_url, proxy, include_timestamps)
                     
                     # Save to dataset
                     await Actor.push_data(result)
