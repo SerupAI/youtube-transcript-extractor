@@ -38,6 +38,7 @@
       "title": "Proxy Server",
       "type": "string",
       "description": "Optional proxy server for requests (recommended: residential proxy). Format: http://proxy:port or socks5://proxy:port",
+      "editor": "textfield",
       "example": "http://residential-proxy.com:8080"
     },
     "maxRetries": {
