@@ -30,7 +30,7 @@ class YouTubeTranscriptExtractor:
     """YouTube transcript extractor using optimized VTT processing"""
     
     def __init__(self):
-        self.timestamp_regex = re.compile(r'^\\d+$|^\\d{1,2}:\\d{2}(:\\d{2})?(\.\\d{3})?$')
+        self.timestamp_regex = re.compile(r'^\d+$|^\d{1,2}:\d{2}(:\d{2})?(\.\d{3})?$')
         self.tag_regex = re.compile(r'<[^>]*>')
     
     def extract_video_id(self, url: str) -> Optional[str]:
@@ -63,8 +63,13 @@ class YouTubeTranscriptExtractor:
             with open(vtt_file, 'r', encoding='utf-8') as f:
                 content = f.read()
             
+            # Debug: Check if file has content
+            if not content.strip():
+                Actor.log.debug("VTT file is empty")
+                return ""
+            
             # Split into lines
-            lines = content.split('\\n')
+            lines = content.split('\n')
             text_builder = []
             seen_segments = set()
             
@@ -92,10 +97,12 @@ class YouTubeTranscriptExtractor:
                         seen_segments.add(clean_line)
             
             # Join with spaces for clean output
-            return " ".join(text_builder)
+            result = " ".join(text_builder)
+            Actor.log.debug(f"Extracted {len(result)} characters from VTT")
+            return result
             
         except Exception as e:
-            Actor.log.error(f"Error processing VTT file: {e}")
+            Actor.log.error(f"Error processing subtitle file: {e}")
             return ""
     
     async def extract_transcript(self, video_url: str, proxy: Optional[str] = None) -> Dict[str, Any]:
@@ -134,7 +141,7 @@ class YouTubeTranscriptExtractor:
                 if proxy:
                     cmd.extend(["--proxy", proxy])
                 
-                Actor.log.info(f"Running command: {' '.join(cmd)}")
+                Actor.log.info(f"Extracting subtitles...")
                 
                 # Run yt-dlp command
                 result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
@@ -152,7 +159,7 @@ class YouTubeTranscriptExtractor:
                 
                 # Use first VTT file found
                 vtt_file = vtt_files[0]
-                Actor.log.info(f"Found VTT file: {vtt_file.name}")
+                Actor.log.info(f"Processing subtitle file...")
                 
                 # Process VTT file using optimized approach
                 transcript_text = self.process_vtt_file(vtt_file)
