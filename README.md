@@ -66,7 +66,7 @@ Tired of complex YouTube scrapers with 25+ configuration options? We extract tra
 
 Results are presented in a user-friendly interface with detailed metadata:
 
-### **Successful Extraction**
+### **Success**
 ```json
 {
   "success": true,
@@ -75,14 +75,12 @@ Results are presented in a user-friendly interface with detailed metadata:
   "video_title": "Rick Astley - Never Gonna Give You Up",
   "transcript": "We're no strangers to love You know the rules and so do I...",
   "transcript_length": 1247,
-  "source": "ytdlp_vtt_optimized",
   "language": "en",
-  "includes_timestamps": false,
-  "proxy_used": "direct"
+  "includes_timestamps": false
 }
 ```
 
-### **With Timestamps (Premium)**
+### **With Timestamps**
 ```json
 {
   "success": true,
@@ -93,14 +91,13 @@ Results are presented in a user-friendly interface with detailed metadata:
 }
 ```
 
-### **Failed Extraction**
+### **Error**
 ```json
 {
   "success": false,
   "video_url": "https://www.youtube.com/watch?v=invalid",
   "error": "Could not extract video ID from URL",
-  "attempts": 3,
-  "source": "ytdlp_vtt_optimized"
+  "attempts": 3
 }
 ```
 
