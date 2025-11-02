@@ -10,6 +10,7 @@
   "input": "input_schema.json",
   "dockerfile": "Dockerfile",
   "readme": "README.md",
+  "storageDescription": "dataset_schema.json",
   "categories": ["ENTERTAINMENT", "AUTOMATION"],
   "defaultRunOptions": {
     "build": "latest",

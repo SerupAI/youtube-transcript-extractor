@@ -1,0 +1,62 @@
+{
+  "title": "YouTube Transcript Results",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "success": {
+      "title": "Success",
+      "type": "boolean",
+      "description": "Whether the transcript extraction was successful"
+    },
+    "video_id": {
+      "title": "Video ID",
+      "type": "string",
+      "description": "YouTube video identifier"
+    },
+    "video_url": {
+      "title": "Video URL",
+      "type": "string",
+      "description": "Original YouTube video URL"
+    },
+    "video_title": {
+      "title": "Video Title",
+      "type": "string",
+      "description": "Title of the YouTube video"
+    },
+    "transcript": {
+      "title": "Transcript",
+      "type": "string",
+      "description": "Clean transcript text extracted from the video"
+    },
+    "transcript_length": {
+      "title": "Transcript Length",
+      "type": "integer",
+      "description": "Number of characters in the transcript"
+    },
+    "source": {
+      "title": "Extraction Source",
+      "type": "string",
+      "description": "Method used for transcript extraction"
+    },
+    "language": {
+      "title": "Language",
+      "type": "string",
+      "description": "Language of the extracted transcript"
+    },
+    "proxy_used": {
+      "title": "Proxy Used",
+      "type": "string",
+      "description": "Proxy server used for extraction (if any)"
+    },
+    "error": {
+      "title": "Error Message",
+      "type": "string",
+      "description": "Error message if extraction failed"
+    },
+    "attempts": {
+      "title": "Attempts Made",
+      "type": "integer",
+      "description": "Number of extraction attempts made"
+    }
+  }
+}
