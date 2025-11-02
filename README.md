@@ -127,5 +127,4 @@ For issues or questions:
 
 ## 🔄 Updates
 
-- **v1.0.0**: Initial release with optimized VTT extraction
 - Regular updates to maintain YouTube compatibility
