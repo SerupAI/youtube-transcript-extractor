@@ -104,12 +104,6 @@ Results are presented in a user-friendly interface with detailed metadata:
 }
 ```
 
-## 🔧 How It Works
-
-1. **URL Processing**: Extracts video IDs from various YouTube URL formats
-2. **VTT Extraction**: Uses yt-dlp to download only subtitle files (not video)
-3. **Text Processing**: Applies advanced VTT cleaning and deduplication
-4. **Output Generation**: Creates structured data with metadata
 
 ## 🎯 Perfect Use Cases
 
