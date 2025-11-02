@@ -45,6 +45,7 @@
       "title": "Max Retries",
       "type": "integer",
       "description": "Maximum number of retry attempts per video",
+      "editor": "number",
       "default": 3,
       "minimum": 1,
       "maximum": 10
