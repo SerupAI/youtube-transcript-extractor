@@ -1,0 +1,50 @@
+{
+  "title": "YouTube Transcript Extractor Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "startUrls": {
+      "title": "Start URLs",
+      "type": "array",
+      "description": "List of YouTube video URLs to extract transcripts from",
+      "prefill": [
+        { "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+      ],
+      "editor": "requestListSources",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "pattern": "^https?://.*"
+          }
+        },
+        "required": ["url"]
+      }
+    },
+    "videoUrls": {
+      "title": "Video URLs (alternative format)",
+      "type": "array",
+      "description": "Alternative way to provide YouTube URLs as a simple array of strings",
+      "items": {
+        "type": "string",
+        "pattern": "^https?://.*youtube.*"
+      }
+    },
+    "proxy": {
+      "title": "Proxy Server",
+      "type": "string",
+      "description": "Optional proxy server for requests (recommended: residential proxy). Format: http://proxy:port or socks5://proxy:port",
+      "example": "http://residential-proxy.com:8080"
+    },
+    "maxRetries": {
+      "title": "Max Retries",
+      "type": "integer",
+      "description": "Maximum number of retry attempts per video",
+      "default": 3,
+      "minimum": 1,
+      "maximum": 10
+    }
+  },
+  "required": []
+}

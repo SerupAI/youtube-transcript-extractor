@@ -1,0 +1,8 @@
+# Apify SDK for Python
+apify>=1.7.0
+
+# YouTube video processing
+yt-dlp>=2024.10.7
+
+# Additional utilities
+requests>=2.31.0
