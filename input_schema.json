@@ -17,6 +17,7 @@
           "url": {
             "title": "URL",
             "type": "string",
+            "description": "YouTube video URL to extract transcript from",
             "pattern": "^https?://.*"
           }
         },
