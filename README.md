@@ -121,16 +121,6 @@ Results are presented in a user-friendly interface with detailed metadata:
 - **Educators**: Create searchable video course materials
 - **Podcasters**: Convert YouTube videos to blog posts and articles
 
-## 💰 Pricing Advantage
-
-**Competitor Analysis:**
-- **Leading competitor**: $20/month + usage fees
-- **This actor**: $0.02 per successful transcript (no monthly fees)
-
-**Cost Comparison:**
-- **100 transcripts**: You pay $2 vs competitor's $20+ = **90% savings**
-- **500 transcripts**: You pay $10 vs competitor's $25+ = **60% savings**  
-- **1,000 transcripts**: You pay $20 vs competitor's $30+ = **33% savings**
 
 ## 🏗️ Technical Specifications
 
